@@ -10,7 +10,7 @@ namespace Malshinon.DB
     {
     public class MySQL
         {
-        static string connectionString = "Server=localhost;Port=3306;DataBase=malshibuidb;User=root;Password='';";
+        static string connectionString = "Server=localhost;Port=3306;DataBase=malshinon_db;User=root;Password='';";
         private MySqlConnection _conn;
 
         public MySQL()
@@ -20,7 +20,7 @@ namespace Malshinon.DB
             try
                 {
                 conn.Open();
-                Console.WriteLine("Connected to: 'malshibuiDB'");
+                Console.WriteLine("Connected to: 'Malshinon DB'");
                 conn.Close();
                 }
             catch (MySqlException ex)
