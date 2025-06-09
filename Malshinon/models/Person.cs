@@ -19,7 +19,7 @@ namespace Malshinon.models
         public int NumReports { get; private set; }
         public int NumMentions { get; private set; }
 
-        Person(int id, string fName,string lName,string sCode,string type, int Reports,int Mentions)
+        Person(string fName,string lName,string sCode,string type, int Reports,int Mentions,int id=0)
             {
             ID = id;
             FirstName = fName;
@@ -57,9 +57,9 @@ namespace Malshinon.models
         public void Printer()
             {
             Console.WriteLine($"({ID}){SecretCode},\n" +
-                $"{Type}: {FirstName} {LastName}\n" +
-                $"NumReports: {NumReports}\n" +
-                $"NumMentions: {NumMentions}\n");
+                $"{Type}: {FirstName} {LastName},\n" +
+                $"NumReports: {NumReports},\n" +
+                $"NumMentions: {NumMentions}.\n");
             }
         }
     }
