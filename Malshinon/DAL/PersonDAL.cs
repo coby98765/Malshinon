@@ -50,5 +50,24 @@ namespace Malshinon.models
                 }
             }
 
+        //Update
+        public void UpdatePerson(Person person)
+            {
+            string query = $"UPDATE people SET type = '{person.Type}',num_reports = '{person.NumReports}',num_mentions = '{person.NumMentions}' WHERE id = {person.ID};";
+            MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+            try
+                {
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Person Updated.");
+                }
+            catch (Exception ex)
+                {
+                Console.WriteLine(ex.Message);
+                }
+            finally
+                {
+                _sqlData.CloseConnection();
+                }
+            }
         }
     }
