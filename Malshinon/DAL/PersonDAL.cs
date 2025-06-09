@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,22 @@ namespace Malshinon.models
             {
             _sqlData = connData;
             }
+
+        //format user into Person Model
+        private Person PersonFormatter(MySqlDataReader data)
+            {
+            int id = data.GetInt32("id");
+            string firstName = data.GetString("first_name");
+            string lastName = data.GetString("last_name");
+            string codeName = data.GetString("secret_code");
+            string type = data.GetString("type");
+            int numReports = data.GetInt32("num_reports");
+            int numMentions = data.GetInt32("num_mentions");
+
+            Person newPerson = new Person(firstName, lastName, codeName, type, numReports, numMentions, id);
+            return newPerson;
+            }
+
 
         //CRUD Methods
         //Create
@@ -69,5 +86,46 @@ namespace Malshinon.models
                 _sqlData.CloseConnection();
                 }
             }
+        //Read
+            //Get Person By ID
+        public Person GetPersonById(int id) 
+            {
+            Person person = null;
+            MySqlCommand cmd = null;
+            MySqlDataReader reader = null;
+            string query = $"SELECT * FROM people WHERE people.id = {id};";
+            try
+                {
+                MySqlConnection connection = _sqlData.GetConnection();
+                cmd = new MySqlCommand(query, connection);
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    {
+                    person = PersonFormatter(reader);
+                    }
+                }
+            catch (Exception ex)
+                {
+                Console.WriteLine($"Error while fetching Person: {ex.Message}");
+                throw;
+                }
+            finally
+                {
+                if (reader != null && !reader.IsClosed)
+                    reader.Close();
+                _sqlData.CloseConnection();
+                }
+            return person;
+            }
+
+            //Get Person By SecretCode
+        public Person GetPersonBySecret(string secretCode) { }
+
+            //Get All People
+        public List<Person> GetPeopleList() { }
+
+        //Delete
+        public void DeletePersonById(int id) { }
+
         }
     }
