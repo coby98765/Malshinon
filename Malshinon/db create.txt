@@ -1,0 +1,19 @@
+create table people(
+	id int AUTO_INCREMENT PRIMARY KEY,
+	secret_code varchar(255) NOT NULL UNIQUE,
+	first_name varchar(255) NOT NULL,
+	last_name varchar(255) NOT NULL,
+	type  ENUM('reporter', 'target', 'both', 'potential_agent'),
+	num_reports  int DEFAULT 0,
+	num_mentions  int DEFAULT 0,
+)
+
+CREATE TABLE IntelReports(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reporter_id INT,
+    target_id INT,
+    text TEXT NOT NULL,
+    TIMESTAMP DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reporter_id) REFERENCES people(id),
+    FOREIGN KEY (target_id) REFERENCES people(id)
+)
