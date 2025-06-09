@@ -8,12 +8,12 @@ using MySql.Data.MySqlClient;
 
 namespace Malshinon.DB
     {
-    public class MySQL
+    public class MySqlData
         {
         static string connectionString = "Server=localhost;Port=3306;DataBase=malshinon_db;User=root;Password='';";
         private MySqlConnection _conn;
 
-        public MySQL()
+        public MySqlData()
             {
             var conn = new MySqlConnection(connectionString);
             _conn = conn;
