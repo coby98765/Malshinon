@@ -19,7 +19,7 @@ namespace Malshinon.models
         public int NumReports { get; private set; }
         public int NumMentions { get; private set; }
 
-        Person(string fName,string lName,string sCode,string type, int Reports,int Mentions,int id=0)
+        public Person(string fName,string lName,string sCode,string type, int Reports,int Mentions,int id=0)
             {
             ID = id;
             FirstName = fName;

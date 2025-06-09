@@ -17,7 +17,7 @@ namespace Malshinon.models
         public DateTime TimeStamp { get; private set; }
 
 
-        IntelReport(int RepId, int TarID, string msg, DateTime TStamp, int id = 0)
+        public IntelReport(int RepId, int TarID, string msg, DateTime TStamp, int id = 0)
             {
             ID = id;
             ReporterID = RepId;
