@@ -39,12 +39,11 @@ namespace Malshinon.models
         public void CreateReport(IntelReport report)
             {
             string query = @"INSERT INTO `intelreports`
-                           (id,reporter_id,target_id,text,timestamp)
-                            VALUES(@id,@reporter_id,@target_id,@text)";
+                           (reporter_id,target_id,text)
+                            VALUES(@reporter_id,@target_id,@text)";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
             try
                 {
-                cmd.Parameters.AddWithValue("@SecretCode", report.ID);
                 cmd.Parameters.AddWithValue("@reporter_id", report.ReporterID);
                 cmd.Parameters.AddWithValue("@target_id", report.TargetID);
                 cmd.Parameters.AddWithValue("@text", report.Text);
