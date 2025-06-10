@@ -88,7 +88,7 @@ namespace Malshinon.models
 
         //Read
         //Universal IntelReport Getter
-        public List<IntelReport> GetReportsQuery(string queryParam)
+        private List<IntelReport> GetReportsQuery(string queryParam)
             {
             List<IntelReport> reports = new List<IntelReport>();
             MySqlCommand cmd = null;

@@ -87,7 +87,7 @@ namespace Malshinon.models
             }
         //Read
         //Universal People Getter
-        public List<Person> GetPeopleQuery(string queryParam)
+        private List<Person> GetPeopleQuery(string queryParam)
             {
             List<Person> people = new List<Person>();
             MySqlCommand cmd = null;
