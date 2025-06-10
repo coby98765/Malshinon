@@ -20,10 +20,6 @@ namespace Malshinon
             IntelReportDAL reportDAL = new IntelReportDAL(sqlData);
             IntelReportTest intelReportTests = new IntelReportTest(reportDAL);
 
-
-
-
-
             }
         }
     }
