@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.Compiler;
+using Google.Protobuf.WellKnownTypes;
 using Malshinon.DB;
 using Malshinon.models;
 using MySql.Data.MySqlClient;
@@ -36,12 +37,13 @@ namespace Malshinon.models
             }
         //CRUD Methods
         //Create
-        public void CreateReport(IntelReport report)
+        public IntelReport CreateReport(IntelReport report)
             {
             string query = @"INSERT INTO `intelreports`
                            (id,reporter_id,target_id,text,timestamp)
                             VALUES(@id,@reporter_id,@target_id,@text)";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+            MySqlDataReader reader = null;
             try
                 {
                 cmd.Parameters.AddWithValue("@SecretCode", report.ID);
@@ -49,46 +51,49 @@ namespace Malshinon.models
                 cmd.Parameters.AddWithValue("@target_id", report.TargetID);
                 cmd.Parameters.AddWithValue("@text", report.Text);
 
-                int response = cmd.ExecuteNonQuery();
-                Console.WriteLine(response > 0
-                    ? "Report Added."
-                    : "Report was not Added.");
+                reader = cmd.ExecuteReader();
+                report = ReportFormatter(reader); 
+                Console.WriteLine("Report Added.");
                 }
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
-                throw;
+                return null;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
+            return report;
             }
 
         //Update
-        public void UpdateReport(IntelReport report)
+        public IntelReport UpdateReport(IntelReport report)
             {
             string query = $"UPDATE `intelreports` SET text = '{report.Text}' WHERE id = {report.ID};";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+            MySqlDataReader reader = null;
             try
                 {
-                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                report = ReportFormatter(reader);
                 Console.WriteLine("Report Updated.");
                 }
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
-                throw;
+                return null;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
+            return report;
             }
 
         //Read
         //Universal IntelReport Getter
-        public List<IntelReport> GetReportsQuery(string queryParam)
+        private List<IntelReport> GetReportsQuery(string queryParam)
             {
             List<IntelReport> reports = new List<IntelReport>();
             MySqlCommand cmd = null;
@@ -187,24 +192,29 @@ namespace Malshinon.models
             }
 
         //Delete
-        public void DeleteReportById(int id)
+        public IntelReport DeleteReportById(int id)
             {
             string query = $"DELETE FROM intelreports WHERE intelreports.id = {id}";
+            MySqlDataReader reader = null;
+            IntelReport report;
+
             try
                 {
                 MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
-                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                report = ReportFormatter(reader);
                 Console.WriteLine($"Report {id} was Deleted.");
                 }
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
+                return null;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
-
+            return report;
             }
         }
     }
