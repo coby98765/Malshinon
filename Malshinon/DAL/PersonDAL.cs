@@ -41,8 +41,8 @@ namespace Malshinon.models
         public void CreatePerson(Person person)
             {
             string query = @"INSERT INTO people
-                           (secret_code,first_name,last_name,type,num_reports,num_mentions)
-                            VALUES(@SecretCode,@FirstName,@LastName,@Type,@NumReports,@NumMentions)";
+                           (secret_code,first_name,last_name,type)
+                            VALUES(@SecretCode,@FirstName,@LastName,@Type)";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
             try
                 {
@@ -50,8 +50,6 @@ namespace Malshinon.models
                 cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", person.LastName);
                 cmd.Parameters.AddWithValue("@Type", person.Type);
-                cmd.Parameters.AddWithValue("@NumReports", person.NumReports);
-                cmd.Parameters.AddWithValue("@NumMentions", person.NumMentions);
 
                 int response = cmd.ExecuteNonQuery();
                 Console.WriteLine(response > 0

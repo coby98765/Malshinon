@@ -25,6 +25,12 @@ namespace Malshinon.models
             Text = msg;
             TimeStamp = TStamp;
             }
+
+        public string EditText(string newText)
+            {
+            Text = newText;
+            return newText;
+            }
         public void Printer()
             {
             Console.WriteLine($"({ID}){TimeStamp},\n" +
