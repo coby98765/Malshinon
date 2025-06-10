@@ -13,7 +13,7 @@ namespace Malshinon.DB
         static string connectionString = "Server=localhost;Port=3306;DataBase=malshinon_db;User=root;Password='';";
         private MySqlConnection _conn;
 
-        public MySqlData()
+        public void Setup()
             {
             var conn = new MySqlConnection(connectionString);
             _conn = conn;
@@ -22,6 +22,8 @@ namespace Malshinon.DB
                 conn.Open();
                 Console.WriteLine("Connected to: 'Malshinon DB'");
                 conn.Close();
+                Console.WriteLine("Connection Was Closed.");
+
                 }
             catch (MySqlException ex)
                 {

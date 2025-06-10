@@ -88,7 +88,7 @@ namespace Malshinon.models
                 }
             }
         //Read
-        //Universal People Reader
+        //Universal People Getter
         public List<Person> GetPeopleQuery(string queryParam)
             {
             List<Person> people = new List<Person>();
@@ -122,7 +122,7 @@ namespace Malshinon.models
         //Get Person By ID
         public Person GetPersonById(int id) 
             {
-            string query = $" WHERE people.id = {id}";
+            string query = $" WHERE people.id = {id} LIMIT 1";
             List<Person> people = GetPeopleQuery(query);
             if (people.Count > 0)
                 {
