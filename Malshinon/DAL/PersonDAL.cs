@@ -2,6 +2,7 @@
 using Malshinon.models;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.PortableExecutable;
@@ -87,13 +88,13 @@ namespace Malshinon.models
                 }
             }
         //Read
-            //Get Person By ID
-        public Person GetPersonById(int id) 
+        //Universal People Reader
+        public List<Person> GetPeopleQuery(string queryParam)
             {
-            Person person = null;
+            List<Person> people = new List<Person>();
             MySqlCommand cmd = null;
             MySqlDataReader reader = null;
-            string query = $"SELECT * FROM people WHERE people.id = {id};";
+            string query = $"SELECT * FROM people{queryParam};";
             try
                 {
                 MySqlConnection connection = _sqlData.GetConnection();
@@ -101,7 +102,7 @@ namespace Malshinon.models
                 reader = cmd.ExecuteReader();
                 while (reader.Read())
                     {
-                    person = PersonFormatter(reader);
+                    people.Add(PersonFormatter(reader));
                     }
                 }
             catch (Exception ex)
@@ -115,17 +116,67 @@ namespace Malshinon.models
                     reader.Close();
                 _sqlData.CloseConnection();
                 }
-            return person;
+            return people;
+            }
+
+        //Get Person By ID
+        public Person GetPersonById(int id) 
+            {
+            string query = $" WHERE people.id = {id}";
+            List<Person> people = GetPeopleQuery(query);
+            if (people.Count > 0)
+                {
+                return people[0];
+                }
+            else
+                {
+                Console.WriteLine("Person not found.");
+                return null;
+                }
             }
 
             //Get Person By SecretCode
-        public Person GetPersonBySecret(string secretCode) { }
+        public Person GetPersonBySecret(string secretCode) 
+            {
+            string query = $" WHERE people.secret_code = '{secretCode}'";
+            List<Person> people = GetPeopleQuery(query);
+            if(people.Count > 0)
+                {
+                return people[0];
+                }
+            else
+                {
+                Console.WriteLine("Person not found.");
+                return null;
+                }
+            }
 
-            //Get All People
-        public List<Person> GetPeopleList() { }
+        //Get All People
+        public List<Person> GetPeopleList() 
+            {
+            return GetPeopleQuery("");
+            }
 
         //Delete
-        public void DeletePersonById(int id) { }
+        public void DeletePersonById(int id) 
+            {
+            string query = $"DELETE FROM people WHERE people.id = {id}";
+            try
+                {
+                MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+                cmd.ExecuteNonQuery();
+                Console.WriteLine($"{id}: Deleted.");
+                }
+            catch(Exception ex)
+                {
+                Console.WriteLine(ex.Message);
+                }
+            finally
+                {
+                _sqlData.CloseConnection();
+                }
 
+            }
         }
     }
+    
