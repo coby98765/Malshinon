@@ -1,4 +1,5 @@
-﻿using Malshinon.DB;
+﻿using Google.Protobuf.Compiler;
+using Malshinon.DB;
 using Malshinon.models;
 using MySql.Data.MySqlClient;
 using System;
@@ -44,22 +45,23 @@ namespace Malshinon.models
                            (secret_code,first_name,last_name,type)
                             VALUES(@SecretCode,@FirstName,@LastName,@Type)";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+            MySqlDataReader reader = null;
+
             try
                 {
                 cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
                 cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", person.LastName);
                 cmd.Parameters.AddWithValue("@Type", person.Type);
-
-                int response = cmd.ExecuteNonQuery();
-                Console.WriteLine(response > 0
-                    ? "Person Added."
-                    : "Person was not Added.");
+                reader = cmd.ExecuteReader();
+                person = PersonFormatter(reader);
+                //int response = cmd.ExecuteNonQuery();
+                Console.WriteLine("Person Added.");
                 }
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
-                throw;
+                return null;
                 }
             finally
                 {
@@ -73,15 +75,17 @@ namespace Malshinon.models
             {
             string query = $"UPDATE people SET type = '{person.Type}',num_reports = '{person.NumReports}',num_mentions = '{person.NumMentions}' WHERE id = {person.ID};";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
+            MySqlDataReader reader = null;
             try
                 {
-                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                person = PersonFormatter(reader);
                 Console.WriteLine("Person Updated.");
                 }
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
-                throw;
+                return null;
                 }
             finally
                 {
@@ -160,24 +164,29 @@ namespace Malshinon.models
             }
 
         //Delete
-        public void DeletePersonById(int id) 
+        public Person DeletePersonById(int id) 
             {
             string query = $"DELETE FROM people WHERE people.id = {id}";
+            MySqlDataReader reader = null;
+            Person person;
+
             try
                 {
                 MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
-                cmd.ExecuteNonQuery();
+                reader = cmd.ExecuteReader();
+                person = PersonFormatter(reader);
                 Console.WriteLine($"{id}: Deleted.");
                 }
             catch(Exception ex)
                 {
                 Console.WriteLine(ex.Message);
+                return null;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
-
+            return person;
             }
         }
     }
