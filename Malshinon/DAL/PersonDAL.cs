@@ -38,7 +38,7 @@ namespace Malshinon.models
 
         //CRUD Methods
         //Create
-        public void CreatePerson(Person person)
+        public Person CreatePerson(Person person)
             {
             string query = @"INSERT INTO people
                            (secret_code,first_name,last_name,type)
@@ -59,15 +59,17 @@ namespace Malshinon.models
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
+                throw;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
+            return person;
             }
 
         //Update
-        public void UpdatePerson(Person person)
+        public Person UpdatePerson(Person person)
             {
             string query = $"UPDATE people SET type = '{person.Type}',num_reports = '{person.NumReports}',num_mentions = '{person.NumMentions}' WHERE id = {person.ID};";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
@@ -79,11 +81,13 @@ namespace Malshinon.models
             catch (Exception ex)
                 {
                 Console.WriteLine(ex.Message);
+                throw;
                 }
             finally
                 {
                 _sqlData.CloseConnection();
                 }
+            return person;
             }
         //Read
         //Universal People Getter

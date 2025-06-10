@@ -36,7 +36,7 @@ namespace Malshinon.models
             }
         //CRUD Methods
         //Create
-        public void CreateReport(IntelReport report)
+        public IntelReport CreateReport(IntelReport report)
             {
             string query = @"INSERT INTO `intelreports`
                            (id,reporter_id,target_id,text,timestamp)
@@ -63,10 +63,11 @@ namespace Malshinon.models
                 {
                 _sqlData.CloseConnection();
                 }
+            return report;
             }
 
         //Update
-        public void UpdateReport(IntelReport report)
+        public IntelReport UpdateReport(IntelReport report)
             {
             string query = $"UPDATE `intelreports` SET text = '{report.Text}' WHERE id = {report.ID};";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
@@ -84,6 +85,7 @@ namespace Malshinon.models
                 {
                 _sqlData.CloseConnection();
                 }
+            return report;
             }
 
         //Read
@@ -204,7 +206,6 @@ namespace Malshinon.models
                 {
                 _sqlData.CloseConnection();
                 }
-
             }
         }
     }
