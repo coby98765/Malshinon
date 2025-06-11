@@ -34,14 +34,14 @@ namespace Malshinon.DB
         public MySqlConnection GetConnection()
             {
             _conn.Open();
-            Console.WriteLine("Connection Opened.");
+            //Console.WriteLine("Connection Opened.");
             return _conn;
             }
 
         public void CloseConnection()
             {
             _conn.Close();
-            Console.WriteLine("Connection Closed.");
+            //Console.WriteLine("Connection Closed.");
             }
         }
     }

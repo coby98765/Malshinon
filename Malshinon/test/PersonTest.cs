@@ -14,18 +14,18 @@ namespace Malshinon.models
             PersonDAL personDAL = personDal;
             //testing PersonDAL CRUD
             //Create
-            Person person = new Person("yaakov", "levi", "TheMan239", "target", 0, 0);
-            personDAL.CreatePerson(person);
+            Person person = new Person("yaakov", "levi", "TheX909", "target", 0, 0);
+            person = personDAL.CreatePerson(person);
+            Console.WriteLine("Added Person.");
             //read
             List<Person> people = personDAL.GetPeopleList();
-            people[0].Printer();
             //update
             people[0].IncMentions();
             people[0].Printer();
             personDAL.UpdatePerson(people[0]);
             personDAL.GetPersonById(people[0].ID).Printer();
             //delete
-            personDAL.DeletePersonById(people[1].ID);
+            //personDAL.DeletePersonById(people[1].ID);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace Malshinon.models
             reportDAL.UpdateReport(reports[0]);
             reportDAL.GetReportById(reports[0].ID).Printer();
             //delete
-            reportDAL.DeleteReportById(reports[1].ID);
+            reportDAL.DeleteReportById(reports[1]);
             }
         }
     }
