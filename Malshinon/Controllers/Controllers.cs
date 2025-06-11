@@ -12,10 +12,10 @@ namespace Malshinon.models
         private PersonDAL personDAL;
         private IntelReportDAL intelReportDAL;
 
-        public Controllers(MySqlData connData)
+        public Controllers(PersonDAL _personDAL, IntelReportDAL _intelReportDAL)
             {
-            personDAL = new PersonDAL(connData);
-            intelReportDAL = new IntelReportDAL(connData);
+            personDAL = _personDAL;
+            intelReportDAL = _intelReportDAL;
             }
         //create person
         public Person? CreatePerson(string secret, string type)
