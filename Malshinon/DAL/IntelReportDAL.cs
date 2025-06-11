@@ -41,7 +41,8 @@ namespace Malshinon.models
             {
             string query = @"INSERT INTO `intelreports`
                            (reporter_id,target_id,text)
-                            VALUES(@reporter_id,@target_id,@text)";
+                            VALUES(@reporter_id,@target_id,@text);"+
+                            "SELECT * FROM intelreports WHERE intelreports.id = LAST_INSERT_ID();";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
             MySqlDataReader reader = null;
             try
@@ -51,7 +52,10 @@ namespace Malshinon.models
                 cmd.Parameters.AddWithValue("@text", report.Text);
 
                 reader = cmd.ExecuteReader();
-                report = ReportFormatter(reader); 
+                if (reader.Read())
+                    {
+                    report = ReportFormatter(reader);
+                    }
                 Console.WriteLine("Report Added.");
                 }
             catch (Exception ex)
@@ -71,11 +75,13 @@ namespace Malshinon.models
             {
             string query = $"UPDATE `intelreports` SET text = '{report.Text}' WHERE id = {report.ID};";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
-            MySqlDataReader reader = null;
+            //MySqlDataReader reader = null;
             try
                 {
-                reader = cmd.ExecuteReader();
-                report = ReportFormatter(reader);
+                //reader = cmd.ExecuteReader();
+                //report = ReportFormatter(reader);
+                int x = cmd.ExecuteNonQuery();
+
                 Console.WriteLine("Report Updated.");
                 }
             catch (Exception ex)
@@ -191,18 +197,15 @@ namespace Malshinon.models
             }
 
         //Delete
-        public IntelReport DeleteReportById(int id)
+        public IntelReport DeleteReportById(IntelReport report)
             {
-            string query = $"DELETE FROM intelreports WHERE intelreports.id = {id}";
+            string query = $"DELETE FROM intelreports WHERE intelreports.id = {report.ID}";
             MySqlDataReader reader = null;
-            IntelReport report;
-
             try
                 {
                 MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
-                reader = cmd.ExecuteReader();
-                report = ReportFormatter(reader);
-                Console.WriteLine($"Report {id} was Deleted.");
+                int x = cmd.ExecuteNonQuery();
+                Console.WriteLine($"Report {report.ID} was Deleted.");
                 }
             catch (Exception ex)
                 {

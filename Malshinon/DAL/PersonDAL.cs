@@ -43,7 +43,8 @@ namespace Malshinon.models
             {
             string query = @"INSERT INTO people
                            (secret_code,first_name,last_name,type)
-                            VALUES(@SecretCode,@FirstName,@LastName,@Type)";
+                            VALUES(@SecretCode,@FirstName,@LastName,@Type);" +
+                            "SELECT * FROM people WHERE people.id = LAST_INSERT_ID();";
             MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
             MySqlDataReader reader = null;
 
@@ -54,9 +55,11 @@ namespace Malshinon.models
                 cmd.Parameters.AddWithValue("@LastName", person.LastName);
                 cmd.Parameters.AddWithValue("@Type", person.Type);
                 reader = cmd.ExecuteReader();
-                person = PersonFormatter(reader);
-                //int response = cmd.ExecuteNonQuery();
-                Console.WriteLine("Person Added.");
+                if (reader.Read())
+                    {
+                    person = PersonFormatter(reader);
+                    }
+                Console.WriteLine($"Person {person.ID} Added.");
                 }
             catch (Exception ex)
                 {
@@ -79,7 +82,12 @@ namespace Malshinon.models
             try
                 {
                 reader = cmd.ExecuteReader();
-                person = PersonFormatter(reader);
+
+                if (reader.Read())
+                    {
+                    person = PersonFormatter(reader);
+                    }                
+                //int x = cmd.ExecuteNonQuery();
                 Console.WriteLine("Person Updated.");
                 }
             catch (Exception ex)
@@ -164,18 +172,15 @@ namespace Malshinon.models
             }
 
         //Delete
-        public Person DeletePersonById(int id) 
+        public Person DeletePersonById(Person person) 
             {
-            string query = $"DELETE FROM people WHERE people.id = {id}";
+            string query = $"DELETE FROM people WHERE people.id = {person.ID}";
             MySqlDataReader reader = null;
-            Person person;
-
             try
                 {
                 MySqlCommand cmd = new MySqlCommand(query, _sqlData.GetConnection());
-                reader = cmd.ExecuteReader();
-                person = PersonFormatter(reader);
-                Console.WriteLine($"{id}: Deleted.");
+                int x = cmd.ExecuteNonQuery();
+                Console.WriteLine($"{person.ID}: Deleted.");
                 }
             catch(Exception ex)
                 {
