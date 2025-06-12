@@ -142,5 +142,13 @@ namespace Malshinon.models
                 }
             return sumOfMsgLen / reportAmount;
             }
+        public List<IntelReport> GetIntelReportsByReporter(Person reporter)
+            {
+            return intelReportDAL.GetReportsByReporter(reporter.ID);
+            }
+        public List<IntelReport> GetIntelReportsByTarget(Person target)
+            {
+            return intelReportDAL.GetReportsByTarget(target.ID);
+            }
         }
     }
